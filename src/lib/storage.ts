@@ -1,10 +1,14 @@
+import { seedLeads, seedPartners } from '../data/captacao'
 import { seedSubscribers } from '../data/subscribers'
 import type {
   AppState,
+  CollectionLead,
   GarimpoListItem,
   MonthPick,
   MusicalProfile,
   PlanId,
+  ReferralPartner,
+  StockExtraRecord,
   Subscriber,
 } from '../types'
 import { normalizeProfile } from '../types'
@@ -22,8 +26,11 @@ const defaultState = (): AppState => ({
     profile: normalizeProfile(s.profile),
   })),
   stockOverrides: {},
+  stockExtras: [],
   garimpoList: [],
   discogsToken: loadStoredToken(),
+  collectionLeads: structuredClone(seedLeads),
+  referralPartners: structuredClone(seedPartners),
 })
 
 function loadStoredToken(): string | null {
@@ -43,17 +50,25 @@ export function loadState(): AppState {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return defaultState()
-    const parsed = JSON.parse(raw) as AppState
+    const parsed = JSON.parse(raw) as Partial<AppState>
+    const base = defaultState()
     const subscribers = (parsed.subscribers?.length
       ? parsed.subscribers
-      : structuredClone(seedSubscribers)
+      : base.subscribers
     ).map((s) => ({ ...s, profile: normalizeProfile(s.profile) }))
     return {
-      ...defaultState(),
+      ...base,
       ...parsed,
       subscribers,
+      stockExtras: parsed.stockExtras ?? [],
       garimpoList: parsed.garimpoList ?? [],
       discogsToken: parsed.discogsToken ?? loadStoredToken(),
+      collectionLeads: parsed.collectionLeads?.length
+        ? parsed.collectionLeads
+        : structuredClone(seedLeads),
+      referralPartners: parsed.referralPartners?.length
+        ? parsed.referralPartners
+        : structuredClone(seedPartners),
     }
   } catch {
     return defaultState()
@@ -108,3 +123,5 @@ export function removeGarimpoItem(state: AppState, id: string): AppState {
     garimpoList: state.garimpoList.filter((x) => x.id !== id),
   }
 }
+
+export type { CollectionLead, ReferralPartner, StockExtraRecord }

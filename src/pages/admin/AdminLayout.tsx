@@ -6,6 +6,8 @@ const links = [
   { to: '/admin/estoque', label: 'Estoque' },
   { to: '/admin/assinantes', label: 'Assinantes' },
   { to: '/admin/curadoria', label: 'Curadoria' },
+  { to: '/admin/captacao', label: 'Captação' },
+  { to: '/admin/parceiros', label: 'Parceiros' },
   { to: '/admin/config', label: 'Config' },
 ]
 
@@ -18,7 +20,7 @@ export function AdminLayout() {
         <span className="example-tag">Painel interno · dados de exemplo</span>
         <h1 className="page-title">Curadoria & operação</h1>
         <p className="muted">
-          Estoque, assinantes, motor de recomendação e KPIs do piloto.
+          Estoque, assinantes, curadoria, captação de coleções e KPIs do piloto.
         </p>
         <nav className="admin-nav" aria-label="Admin">
           {links.map((l) => (

@@ -17,11 +17,15 @@ import {
 import type {
   AppState,
   CatalogRelease,
+  CollectionLead,
   GarimpoListItem,
+  LotValuationSummary,
   MonthPick,
   MusicalProfile,
   PlanId,
   RatingLabel,
+  ReferralPartner,
+  StockExtraRecord,
   Subscriber,
   VinylRecord,
 } from '../types'
@@ -58,10 +62,28 @@ interface AppContextValue {
   }) => void
   removeFromGarimpoList: (id: string) => void
   clearGarimpoList: (subscriberId?: string) => void
+  addCollectionLead: (lead: CollectionLead) => void
+  updateCollectionLead: (lead: CollectionLead) => void
+  upsertPartner: (partner: ReferralPartner) => void
+  removePartner: (id: string) => void
+  purchaseLeadIntoStock: (input: {
+    leadId: string
+    valuation: LotValuationSummary
+  }) => void
   resetDemo: () => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
+
+function decadeFromYear(year: number): VinylRecord['decade'] {
+  if (year < 1970) return '60s'
+  if (year < 1980) return '70s'
+  if (year < 1990) return '80s'
+  if (year < 2000) return '90s'
+  if (year < 2010) return '00s'
+  if (year < 2020) return '10s'
+  return '20s'
+}
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>(() => loadState())
@@ -71,11 +93,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [state])
 
   const stock = useMemo(() => {
-    return baseRecords.map((r) => ({
+    const base = baseRecords.map((r) => ({
       ...r,
       ...(state.stockOverrides[r.id] ?? {}),
     }))
-  }, [state.stockOverrides])
+    return [...base, ...state.stockExtras]
+  }, [state.stockOverrides, state.stockExtras])
 
   const sessionSubscriber = useMemo(
     () =>
@@ -142,7 +165,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setState((s) => {
         const sub = s.subscribers.find((x) => x.id === s.sessionSubscriberId)
         if (!sub) return s
-        const month = new Date().toISOString().slice(0, 7)
+        const month = new Date().toISOString().slice(0, 10).slice(0, 7)
         let deliveries = [...sub.deliveries]
         const existingIdx = deliveries.findIndex((d) => d.month === month)
         const feedbackEntry = {
@@ -252,6 +275,103 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
+  const addCollectionLead = useCallback((lead: CollectionLead) => {
+    setState((s) => ({
+      ...s,
+      collectionLeads: [lead, ...s.collectionLeads],
+    }))
+  }, [])
+
+  const updateCollectionLead = useCallback((lead: CollectionLead) => {
+    setState((s) => ({
+      ...s,
+      collectionLeads: s.collectionLeads.map((l) =>
+        l.id === lead.id ? { ...lead, updatedAt: new Date().toISOString() } : l,
+      ),
+    }))
+  }, [])
+
+  const upsertPartner = useCallback((partner: ReferralPartner) => {
+    setState((s) => {
+      const exists = s.referralPartners.some((p) => p.id === partner.id)
+      return {
+        ...s,
+        referralPartners: exists
+          ? s.referralPartners.map((p) =>
+              p.id === partner.id ? partner : p,
+            )
+          : [...s.referralPartners, partner],
+      }
+    })
+  }, [])
+
+  const removePartner = useCallback((id: string) => {
+    setState((s) => ({
+      ...s,
+      referralPartners: s.referralPartners.filter((p) => p.id !== id),
+    }))
+  }, [])
+
+  const purchaseLeadIntoStock = useCallback(
+    (input: { leadId: string; valuation: LotValuationSummary }) => {
+      setState((s) => {
+        const lead = s.collectionLeads.find((l) => l.id === input.leadId)
+        if (!lead) return s
+        const matched = input.valuation.items.filter((i) => i.matched && i.release)
+        const costEach =
+          matched.length === 0
+            ? input.valuation.avgCostPerDisc
+            : input.valuation.suggestedOffer / matched.length
+
+        const extras: StockExtraRecord[] = matched.map((item, idx) => {
+          const r = item.release!
+          const id = `acq-${input.leadId}-${idx}-${Date.now()}`
+          return {
+            id,
+            artist: r.artist,
+            album: r.album,
+            year: r.year,
+            decade: decadeFromYear(r.year),
+            genres: r.genres,
+            condition: item.condition,
+            cost: Math.round(costEach * 100) / 100,
+            source: 'colecao-inteira',
+            story: `Adquirido no lote de ${lead.name} (${lead.neighborhood}).`,
+            coverHue: (r.year * 17 + idx * 23) % 360,
+            coverPattern: (['radial', 'stripes', 'blocks', 'waves', 'dots'] as const)[
+              idx % 5
+            ],
+            valueTier: costEach > 40 ? 3 : costEach > 25 ? 2 : 1,
+            inStock: true,
+            fromLeadId: lead.id,
+          }
+        })
+
+        const purchasedRecordIds = extras.map((e) => e.id)
+        const updatedLead: CollectionLead = {
+          ...lead,
+          stage: 'comprado',
+          purchasedAt: new Date().toISOString(),
+          purchasedRecordIds,
+          valuationSnapshot: input.valuation,
+          updatedAt: new Date().toISOString(),
+          notes:
+            lead.notes +
+            `\n[Comprado] Oferta ${input.valuation.suggestedOffer.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} · ${matched.length} discos no estoque.`,
+        }
+
+        return {
+          ...s,
+          stockExtras: [...s.stockExtras, ...extras],
+          collectionLeads: s.collectionLeads.map((l) =>
+            l.id === lead.id ? updatedLead : l,
+          ),
+        }
+      })
+    },
+    [],
+  )
+
   const resetDemo = useCallback(() => {
     localStorage.removeItem('garimpo-app-state-v1')
     setState(loadState())
@@ -274,6 +394,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     addToGarimpoList,
     removeFromGarimpoList,
     clearGarimpoList,
+    addCollectionLead,
+    updateCollectionLead,
+    upsertPartner,
+    removePartner,
+    purchaseLeadIntoStock,
     resetDemo,
   }
 

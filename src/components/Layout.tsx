@@ -46,6 +46,7 @@ export function Layout() {
               Planos
             </Link>
             <NavLink to="/quiz">Quiz</NavLink>
+            <NavLink to="/venda-sua-colecao">Venda sua coleção</NavLink>
             <NavLink to="/assinante">Área do assinante</NavLink>
             <NavLink to="/admin">Admin</NavLink>
             {sessionSubscriber ? (
@@ -68,7 +69,13 @@ export function Layout() {
               {brand.pilotMonths} meses
             </div>
           </div>
-          <div>Nome provisório — renomeie em `src/brand.ts`</div>
+          <div>
+            <Link to="/venda-sua-colecao">Venda sua coleção</Link>
+            {' · '}
+            <Link to="/flyer">Flyer</Link>
+            {' · '}
+            Nome provisório — `src/brand.ts`
+          </div>
         </div>
       </footer>
     </>

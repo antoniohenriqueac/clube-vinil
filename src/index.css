@@ -1026,6 +1026,149 @@ code {
   border-radius: 3px;
 }
 
+.consent {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.consent input {
+  margin-top: 0.25rem;
+}
+
+.photo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.photo-row img {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border: 1px solid var(--cream-line);
+}
+
+.kanban {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-top: 1rem;
+}
+
+.kanban__col {
+  background: rgba(255, 250, 240, 0.45);
+  border: 1px solid var(--cream-line);
+  padding: 0.65rem;
+  min-height: 180px;
+}
+
+.kanban__col h3 {
+  font-size: 0.92rem;
+  margin-bottom: 0.55rem;
+}
+
+.kanban__card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--cream-line);
+  background: rgba(255, 250, 240, 0.9);
+  padding: 0.55rem;
+  margin-bottom: 0.45rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.kanban__card--on {
+  border-color: var(--burgundy);
+  background: rgba(122, 31, 43, 0.08);
+}
+
+.flyer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(201, 162, 39, 0.2), transparent 45%),
+    var(--paper);
+  border: 2px solid var(--ink);
+}
+
+.flyer__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--burgundy);
+}
+
+.flyer h1 {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  margin: 0.35rem 0 0.75rem;
+}
+
+.flyer__lead {
+  font-size: 1.15rem;
+  max-width: 36rem;
+}
+
+.flyer ul {
+  margin: 1.25rem 0;
+  padding-left: 1.2rem;
+}
+
+.flyer__qr {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--cream-line);
+}
+
+@media (min-width: 640px) {
+  .flyer__qr {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+.flyer__qr img {
+  width: 220px;
+  height: 220px;
+  background: #fff;
+  border: 1px solid var(--cream-line);
+}
+
+.flyer__url {
+  font-size: 0.9rem;
+  word-break: break-all;
+  font-weight: 600;
+}
+
+.flyer__foot {
+  margin-top: 1.75rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+@media print {
+  .demo-banner,
+  .site-header,
+  .site-footer,
+  .inline-actions {
+    display: none !important;
+  }
+  .flyer {
+    border: none;
+    padding: 0;
+  }
+}
+
 @media (max-width: 720px) {
   .hero__vinyl {
     opacity: 0.35;

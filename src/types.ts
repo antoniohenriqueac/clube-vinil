@@ -170,6 +170,107 @@ export interface MonthPick {
   scores: Record<string, number>
 }
 
+export type LeadStage =
+  | 'novo'
+  | 'contato'
+  | 'visita'
+  | 'proposta'
+  | 'comprado'
+  | 'perdido'
+
+export type LeadSource =
+  | 'placa'
+  | 'google'
+  | 'olx'
+  | 'marketplace'
+  | 'indicacao'
+  | 'advogado'
+  | 'leiloeiro'
+  | 'imobiliaria'
+  | 'mudanca'
+  | 'sebo'
+  | 'formulario'
+
+export type LeadReason =
+  | 'heranca'
+  | 'mudanca'
+  | 'downsizing'
+  | 'desapego'
+  | 'outro'
+
+export type PartnerType =
+  | 'advogado'
+  | 'leiloeiro'
+  | 'imobiliaria'
+  | 'mudanca'
+  | 'sebo'
+  | 'outro'
+
+export interface CollectionLead {
+  id: string
+  name: string
+  whatsapp: string
+  neighborhood: string
+  city: string
+  approxCount: number
+  genresNote: string
+  artistsNote: string
+  condition: ConditionGrade | 'misto' | 'desconhecido'
+  reason: LeadReason
+  titlesText: string
+  photoDataUrls: string[]
+  lgpdConsent: boolean
+  source: LeadSource
+  stage: LeadStage
+  notes: string
+  nextStepDate: string | null
+  offerPercent: number
+  createdAt: string
+  updatedAt: string
+  purchasedAt?: string
+  purchasedRecordIds?: string[]
+  valuationSnapshot?: LotValuationSummary | null
+}
+
+export interface LotLineItem {
+  raw: string
+  matched: boolean
+  release?: CatalogRelease
+  condition: ConditionGrade
+  estimatedUsedPrice: number
+  adjustedPrice: number
+  matchingSubscriberIds: string[]
+}
+
+export interface LotValuationSummary {
+  items: LotLineItem[]
+  resaleTotal: number
+  suggestedOffer: number
+  offerPercent: number
+  avgCostPerDisc: number
+  targetAcquisitionCost: number
+  discsMatchingSubscribers: number
+  subscribersServed: number
+  matchedCount: number
+  unmatchedCount: number
+  mode: CatalogMode
+}
+
+export interface ReferralPartner {
+  id: string
+  name: string
+  type: PartnerType
+  contact: string
+  city: string
+  commissionPercent: number
+  notes: string
+  active: boolean
+}
+
+export interface StockExtraRecord extends VinylRecord {
+  fromLeadId?: string
+}
+
 export interface AppState {
   sessionSubscriberId: string | null
   onboardingDraft: Partial<MusicalProfile> | null
@@ -177,8 +278,11 @@ export interface AppState {
   monthPicks: MonthPick[]
   subscribers: Subscriber[]
   stockOverrides: Partial<Record<string, Partial<VinylRecord>>>
+  stockExtras: StockExtraRecord[]
   garimpoList: GarimpoListItem[]
   discogsToken: string | null
+  collectionLeads: CollectionLead[]
+  referralPartners: ReferralPartner[]
 }
 
 export function emptyMusicalProfile(): MusicalProfile {

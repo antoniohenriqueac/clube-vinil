@@ -28,7 +28,8 @@ Não é uma loja de discos cobrando mensalidade. É uma plataforma de **descober
 2. **Quiz de onboarding** — perfil musical ao vivo (gêneros, estilos, décadas, energia/batida, acústico↔eletrônico, groove) + plano + checkout **demonstração**  
 3. **Área do assinante** — disco do mês, condição, cartão-história, avaliação, histórico, preferências, pausar/cancelar  
 4. **Admin/curadoria** — estoque, assinantes, picks do mês **e** “Sugestões para garimpar” (sourcing fora do estoque), lista de garimpo exportável (CSV / WhatsApp), KPIs  
-5. **Inteligência musical** — mapa de gosto + catálogo Discogs (token opcional) com fallback para seed local (~400 lançamentos)
+5. **Inteligência musical** — mapa de gosto + catálogo Discogs (token opcional) com fallback para seed local (~400 lançamentos)  
+6. **Captação de coleções** — formulário público “Venda sua coleção”, kanban de leads, avaliação de lote, parceiros, flyer/QR
 
 Estado persiste em `localStorage`. Não há backend nem pagamentos reais.
 
@@ -82,7 +83,9 @@ URL prevista: **https://antoniohenriqueac.github.io/clube-vinil/**
 1. Landing → Quiz (veja o painel **Seu perfil musical** ao vivo) → Checkout demo  
 2. Admin → Curadoria → **Sugestões para garimpar** → add lista → CSV/WhatsApp  
 3. Admin → Curadoria → aba Estoque → confirmar pick do mês  
-4. Admin → Config → (opcional) colar token Discogs
+4. Admin → Config → (opcional) colar token Discogs  
+5. `/venda-sua-colecao` → lead demo → Admin → Captação (kanban + avaliar lote)  
+6. `/flyer` para impressão / QR · Admin → Parceiros
 
 ## Aviso
 
