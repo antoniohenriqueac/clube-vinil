@@ -2,7 +2,7 @@
 
 Protótipo front-end clicável de um clube de assinatura mensal de **discos de vinil usados** com curadoria personalizada.
 
-> Nome provisório: altere em [`src/brand.ts`](src/brand.ts) para rebatizar o produto inteiro.
+> Identidade visual oficial em [`src/brand.ts`](src/brand.ts) e tokens CSS (`:root` em `src/index.css`): preto `#080808`, grafite `#252525`, creme `#F5F0E6` / `#D8D0C0`, dourado `#F5B82E` / `#C58B18`. Logo em `public/brand/`.
 
 ## Ideia
 

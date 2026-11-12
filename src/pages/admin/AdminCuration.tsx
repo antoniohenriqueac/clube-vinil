@@ -411,7 +411,7 @@ export function AdminCuration() {
                       style={{
                         textAlign: 'left',
                         cursor: 'pointer',
-                        borderColor: on ? 'var(--burgundy)' : undefined,
+                        borderColor: on ? 'var(--gold)' : undefined,
                         padding: '0.85rem',
                       }}
                     >

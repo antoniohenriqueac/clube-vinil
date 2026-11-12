@@ -37,10 +37,13 @@ export function Landing() {
           </div>
         </div>
         <div className="container hero__content">
-          <div className="hero__brand">
-            {brand.name}
-            <span>.</span>
-          </div>
+          <img
+            className="hero__logo"
+            src={brand.logoHeader}
+            alt={brand.name}
+            width={420}
+            height={84}
+          />
           <h1>Descoberta musical recorrente, em vinil usado.</h1>
           <p>
             Não competimos por quem tem mais discos — competimos por quem entende
@@ -50,7 +53,7 @@ export function Landing() {
             <Link className="btn btn-amber" to="/quiz">
               Fazer o quiz musical
             </Link>
-            <a className="btn btn-ghost" href="#planos" style={{ color: 'var(--paper)', borderColor: 'rgba(242,230,208,0.45)' }}>
+            <a className="btn btn-ghost" href="#planos">
               Ver planos
             </a>
           </div>
