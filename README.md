@@ -25,11 +25,21 @@ Não é uma loja de discos cobrando mensalidade. É uma plataforma de **descober
 ## O que este protótipo cobre
 
 1. **Landing** — hero, como funciona, planos, FAQ, CTA para o quiz  
-2. **Quiz de onboarding** — perfil musical + escolha de plano + checkout **claramente marcado como demonstração** (sem campos de cartão)  
+2. **Quiz de onboarding** — perfil musical ao vivo (gêneros, estilos, décadas, energia/batida, acústico↔eletrônico, groove) + plano + checkout **demonstração**  
 3. **Área do assinante** — disco do mês, condição, cartão-história, avaliação, histórico, preferências, pausar/cancelar  
-4. **Admin/curadoria** — estoque (~40 discos mock), assinantes, motor de recomendação, confirmação de picks, dashboard de unit economics e KPIs (dados de exemplo)
+4. **Admin/curadoria** — estoque, assinantes, picks do mês **e** “Sugestões para garimpar” (sourcing fora do estoque), lista de garimpo exportável (CSV / WhatsApp), KPIs  
+5. **Inteligência musical** — mapa de gosto + catálogo Discogs (token opcional) com fallback para seed local (~400 lançamentos)
 
 Estado persiste em `localStorage`. Não há backend nem pagamentos reais.
+
+### Catálogo Discogs vs seed
+
+| Modo | Quando | Onde configurar |
+| --- | --- | --- |
+| **Seed** (padrão no Pages) | Sem token | Automático |
+| **Discogs** | Token pessoal | Admin → Config, ou `VITE_DISCOGS_TOKEN` (ver `.env.example`) |
+
+O token **nunca** deve ser commitado (`.env` está no `.gitignore`).
 
 ## Stack
 
@@ -69,9 +79,10 @@ URL prevista: **https://antoniohenriqueac.github.io/clube-vinil/**
 
 ## Fluxos para explorar
 
-1. Landing → Quiz → Checkout demo → Área do assinante  
-2. Admin → Curadoria → “Auto-sugerir todos” → Confirmar pick → ver no assinante  
-3. Admin → Dashboard (KPIs e unit economics de exemplo)
+1. Landing → Quiz (veja o painel **Seu perfil musical** ao vivo) → Checkout demo  
+2. Admin → Curadoria → **Sugestões para garimpar** → add lista → CSV/WhatsApp  
+3. Admin → Curadoria → aba Estoque → confirmar pick do mês  
+4. Admin → Config → (opcional) colar token Discogs
 
 ## Aviso
 

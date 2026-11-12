@@ -1,28 +1,59 @@
 import { seedSubscribers } from '../data/subscribers'
-import type { AppState, MonthPick, MusicalProfile, PlanId, Subscriber } from '../types'
+import type {
+  AppState,
+  GarimpoListItem,
+  MonthPick,
+  MusicalProfile,
+  PlanId,
+  Subscriber,
+} from '../types'
+import { normalizeProfile } from '../types'
 
 const KEY = 'garimpo-app-state-v1'
+const TOKEN_KEY = 'garimpo-discogs-token'
 
 const defaultState = (): AppState => ({
   sessionSubscriberId: null,
   onboardingDraft: null,
   selectedPlanId: null,
   monthPicks: [],
-  subscribers: structuredClone(seedSubscribers),
+  subscribers: structuredClone(seedSubscribers).map((s) => ({
+    ...s,
+    profile: normalizeProfile(s.profile),
+  })),
   stockOverrides: {},
+  garimpoList: [],
+  discogsToken: loadStoredToken(),
 })
+
+function loadStoredToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function persistDiscogsToken(token: string | null): void {
+  if (!token) localStorage.removeItem(TOKEN_KEY)
+  else localStorage.setItem(TOKEN_KEY, token)
+}
 
 export function loadState(): AppState {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return defaultState()
     const parsed = JSON.parse(raw) as AppState
+    const subscribers = (parsed.subscribers?.length
+      ? parsed.subscribers
+      : structuredClone(seedSubscribers)
+    ).map((s) => ({ ...s, profile: normalizeProfile(s.profile) }))
     return {
       ...defaultState(),
       ...parsed,
-      subscribers: parsed.subscribers?.length
-        ? parsed.subscribers
-        : structuredClone(seedSubscribers),
+      subscribers,
+      garimpoList: parsed.garimpoList ?? [],
+      discogsToken: parsed.discogsToken ?? loadStoredToken(),
     }
   } catch {
     return defaultState()
@@ -31,23 +62,13 @@ export function loadState(): AppState {
 
 export function saveState(state: AppState): void {
   localStorage.setItem(KEY, JSON.stringify(state))
+  persistDiscogsToken(state.discogsToken)
 }
 
 export function resetState(): AppState {
   const state = defaultState()
   saveState(state)
   return state
-}
-
-export function upsertSubscriber(
-  state: AppState,
-  subscriber: Subscriber,
-): AppState {
-  const idx = state.subscribers.findIndex((s) => s.id === subscriber.id)
-  const subscribers = [...state.subscribers]
-  if (idx >= 0) subscribers[idx] = subscriber
-  else subscribers.push(subscriber)
-  return { ...state, subscribers }
 }
 
 export function createSubscriberFromOnboarding(input: {
@@ -61,7 +82,7 @@ export function createSubscriberFromOnboarding(input: {
     name: input.name,
     email: input.email,
     planId: input.planId,
-    profile: input.profile,
+    profile: normalizeProfile(input.profile),
     status: 'ativo',
     joinedAt: new Date().toISOString().slice(0, 10),
     deliveries: [],
@@ -71,4 +92,19 @@ export function createSubscriberFromOnboarding(input: {
 
 export function setMonthPicks(state: AppState, picks: MonthPick[]): AppState {
   return { ...state, monthPicks: picks }
+}
+
+export function addGarimpoItem(
+  state: AppState,
+  item: GarimpoListItem,
+): AppState {
+  if (state.garimpoList.some((x) => x.id === item.id)) return state
+  return { ...state, garimpoList: [...state.garimpoList, item] }
+}
+
+export function removeGarimpoItem(state: AppState, id: string): AppState {
+  return {
+    ...state,
+    garimpoList: state.garimpoList.filter((x) => x.id !== id),
+  }
 }

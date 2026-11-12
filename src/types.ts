@@ -28,6 +28,17 @@ export type Genre =
 
 export type Decade = '60s' | '70s' | '80s' | '90s' | '00s' | '10s' | '20s'
 
+export type StyleTag = string
+
+export interface MoodAxes {
+  /** 0 = calmo · 100 = dançante */
+  energy: number
+  /** 0 = acústico · 100 = eletrônico */
+  acousticElectronic: number
+  /** 0 = sutil · 100 = groove forte */
+  groove: number
+}
+
 export interface VinylRecord {
   id: string
   artist: string
@@ -61,12 +72,68 @@ export interface Plan {
 export interface MusicalProfile {
   favoriteArtists: string[]
   genres: Genre[]
+  styles: StyleTag[]
   decades: Decade[]
   favoriteAlbums: string[]
   blockedArtists: string[]
   discoveryLevel: number
+  energy: number
+  acousticElectronic: number
+  groove: number
   hasTurntable: boolean | null
 }
+
+export interface WeightedTag {
+  name: string
+  weight: number
+}
+
+export interface TasteProfile {
+  topGenres: WeightedTag[]
+  topStyles: WeightedTag[]
+  decades: WeightedTag[]
+  energy: number
+  acousticElectronic: number
+  groove: number
+  favoriteArtists: string[]
+  blockedArtists: string[]
+  discoveryLevel: number
+  exampleAlbums: CatalogRelease[]
+  summaryLines: string[]
+}
+
+export interface CatalogRelease {
+  id: string
+  artist: string
+  album: string
+  year: number
+  decade: Decade
+  genres: Genre[]
+  styles: string[]
+  mood: MoodAxes
+  typicalUsedPriceBrl?: number
+  discogsId?: number
+  source: 'seed' | 'discogs'
+}
+
+export interface SourcingSuggestion {
+  release: CatalogRelease
+  score: number
+  reasons: string[]
+  inStock: boolean
+  stockRecordId?: string
+}
+
+export interface GarimpoListItem {
+  id: string
+  subscriberId: string
+  release: CatalogRelease
+  score: number
+  reasons: string[]
+  addedAt: string
+}
+
+export type CatalogMode = 'seed' | 'discogs'
 
 export type RatingLabel = 'ja-tinha' | 'nao-curti' | 'amei' | null
 
@@ -110,4 +177,28 @@ export interface AppState {
   monthPicks: MonthPick[]
   subscribers: Subscriber[]
   stockOverrides: Partial<Record<string, Partial<VinylRecord>>>
+  garimpoList: GarimpoListItem[]
+  discogsToken: string | null
+}
+
+export function emptyMusicalProfile(): MusicalProfile {
+  return {
+    favoriteArtists: [],
+    genres: [],
+    styles: [],
+    decades: [],
+    favoriteAlbums: [],
+    blockedArtists: [],
+    discoveryLevel: 50,
+    energy: 50,
+    acousticElectronic: 40,
+    groove: 50,
+    hasTurntable: null,
+  }
+}
+
+export function normalizeProfile(
+  partial?: Partial<MusicalProfile> | null,
+): MusicalProfile {
+  return { ...emptyMusicalProfile(), ...(partial ?? {}) }
 }

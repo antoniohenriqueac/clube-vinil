@@ -11,10 +11,13 @@ import { records as baseRecords } from '../data/records'
 import {
   createSubscriberFromOnboarding,
   loadState,
+  persistDiscogsToken,
   saveState,
 } from '../lib/storage'
 import type {
   AppState,
+  CatalogRelease,
+  GarimpoListItem,
   MonthPick,
   MusicalProfile,
   PlanId,
@@ -22,6 +25,7 @@ import type {
   Subscriber,
   VinylRecord,
 } from '../types'
+import { normalizeProfile } from '../types'
 
 interface AppContextValue {
   state: AppState
@@ -45,6 +49,15 @@ interface AppContextValue {
   }) => void
   setMonthPicks: (picks: MonthPick[]) => void
   confirmPicks: (subscriberId: string) => void
+  setDiscogsToken: (token: string | null) => void
+  addToGarimpoList: (input: {
+    subscriberId: string
+    release: CatalogRelease
+    score: number
+    reasons: string[]
+  }) => void
+  removeFromGarimpoList: (id: string) => void
+  clearGarimpoList: (subscriberId?: string) => void
   resetDemo: () => void
 }
 
@@ -89,7 +102,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       planId: PlanId
       profile: MusicalProfile
     }) => {
-      const subscriber = createSubscriberFromOnboarding(input)
+      const subscriber = createSubscriberFromOnboarding({
+        ...input,
+        profile: normalizeProfile(input.profile),
+      })
       setState((s) => ({
         ...s,
         subscribers: [...s.subscribers, subscriber],
@@ -114,7 +130,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((s) => ({
       ...s,
       subscribers: s.subscribers.map((x) =>
-        x.id === subscriber.id ? subscriber : x,
+        x.id === subscriber.id
+          ? { ...subscriber, profile: normalizeProfile(subscriber.profile) }
+          : x,
       ),
     }))
   }, [])
@@ -181,13 +199,57 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (sub.id !== subscriberId) return sub
         return { ...sub, currentPickIds: pick.recordIds }
       })
-      // mark stock as reserved (out of stock) for confirmed picks
       const stockOverrides = { ...s.stockOverrides }
       for (const id of pick.recordIds) {
         stockOverrides[id] = { ...(stockOverrides[id] ?? {}), inStock: false }
       }
       return { ...s, monthPicks, subscribers, stockOverrides }
     })
+  }, [])
+
+  const setDiscogsToken = useCallback((token: string | null) => {
+    persistDiscogsToken(token)
+    setState((s) => ({ ...s, discogsToken: token }))
+  }, [])
+
+  const addToGarimpoList = useCallback(
+    (input: {
+      subscriberId: string
+      release: CatalogRelease
+      score: number
+      reasons: string[]
+    }) => {
+      const id = `${input.subscriberId}:${input.release.id}`
+      const item: GarimpoListItem = {
+        id,
+        subscriberId: input.subscriberId,
+        release: input.release,
+        score: input.score,
+        reasons: input.reasons,
+        addedAt: new Date().toISOString(),
+      }
+      setState((s) => {
+        if (s.garimpoList.some((x) => x.id === id)) return s
+        return { ...s, garimpoList: [...s.garimpoList, item] }
+      })
+    },
+    [],
+  )
+
+  const removeFromGarimpoList = useCallback((id: string) => {
+    setState((s) => ({
+      ...s,
+      garimpoList: s.garimpoList.filter((x) => x.id !== id),
+    }))
+  }, [])
+
+  const clearGarimpoList = useCallback((subscriberId?: string) => {
+    setState((s) => ({
+      ...s,
+      garimpoList: subscriberId
+        ? s.garimpoList.filter((x) => x.subscriberId !== subscriberId)
+        : [],
+    }))
   }, [])
 
   const resetDemo = useCallback(() => {
@@ -208,6 +270,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     rateCurrentDisc,
     setMonthPicks,
     confirmPicks,
+    setDiscogsToken,
+    addToGarimpoList,
+    removeFromGarimpoList,
+    clearGarimpoList,
     resetDemo,
   }
 

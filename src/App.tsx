@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { AdminCuration } from './pages/admin/AdminCuration'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import { AdminLayout } from './pages/admin/AdminLayout'
+import { AdminSettings } from './pages/admin/AdminSettings'
 import { AdminStock } from './pages/admin/AdminStock'
 import { AdminSubscribers } from './pages/admin/AdminSubscribers'
 import { Checkout } from './pages/Checkout'
@@ -28,6 +29,7 @@ export default function App() {
               <Route path="estoque" element={<AdminStock />} />
               <Route path="assinantes" element={<AdminSubscribers />} />
               <Route path="curadoria" element={<AdminCuration />} />
+              <Route path="config" element={<AdminSettings />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

@@ -6,6 +6,7 @@ import type {
   Subscriber,
   VinylRecord,
 } from '../types'
+import { normalizeProfile } from '../types'
 
 export interface ScoredRecord {
   record: VinylRecord
@@ -152,20 +153,21 @@ export function pickForSubscriber(
   return ranked.slice(0, count)
 }
 
-export function summarizeProfile(profile: MusicalProfile): string[] {
+export function summarizeProfile(
+  profile: Partial<MusicalProfile> | MusicalProfile,
+): string[] {
+  const p = normalizeProfile(profile)
   const lines: string[] = []
-  if (profile.genres.length)
-    lines.push(`Gêneros: ${profile.genres.join(', ')}`)
-  if (profile.decades.length)
-    lines.push(`Décadas: ${profile.decades.join(', ')}`)
-  if (profile.favoriteArtists.length)
-    lines.push(`Artistas: ${profile.favoriteArtists.join(', ')}`)
-  if (profile.blockedArtists.length)
-    lines.push(`Evitar: ${profile.blockedArtists.join(', ')}`)
-  lines.push(
-    `Descoberta × familiar: ${profile.discoveryLevel}% descoberta`,
-  )
-  if (profile.hasTurntable === true) lines.push('Tem toca-discos')
-  if (profile.hasTurntable === false) lines.push('Ainda sem toca-discos')
+  if (p.genres.length) lines.push(`Gêneros: ${p.genres.join(', ')}`)
+  if (p.styles.length) lines.push(`Estilos: ${p.styles.join(', ')}`)
+  if (p.decades.length) lines.push(`Décadas: ${p.decades.join(', ')}`)
+  if (p.favoriteArtists.length)
+    lines.push(`Artistas: ${p.favoriteArtists.join(', ')}`)
+  if (p.blockedArtists.length)
+    lines.push(`Evitar: ${p.blockedArtists.join(', ')}`)
+  lines.push(`Energia ${p.energy} · Acústico↔Eletrônico ${p.acousticElectronic} · Groove ${p.groove}`)
+  lines.push(`Descoberta × familiar: ${p.discoveryLevel}% descoberta`)
+  if (p.hasTurntable === true) lines.push('Tem toca-discos')
+  if (p.hasTurntable === false) lines.push('Ainda sem toca-discos')
   return lines
 }

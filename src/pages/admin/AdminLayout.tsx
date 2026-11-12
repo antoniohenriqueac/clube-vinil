@@ -6,6 +6,7 @@ const links = [
   { to: '/admin/estoque', label: 'Estoque' },
   { to: '/admin/assinantes', label: 'Assinantes' },
   { to: '/admin/curadoria', label: 'Curadoria' },
+  { to: '/admin/config', label: 'Config' },
 ]
 
 export function AdminLayout() {
