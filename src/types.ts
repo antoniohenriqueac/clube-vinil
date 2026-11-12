@@ -190,6 +190,7 @@ export type LeadSource =
   | 'mudanca'
   | 'sebo'
   | 'formulario'
+  | 'assinante'
 
 export type LeadReason =
   | 'heranca'
@@ -269,6 +270,79 @@ export interface ReferralPartner {
 
 export interface StockExtraRecord extends VinylRecord {
   fromLeadId?: string
+  fromSellListingId?: string
+}
+
+export type SellListingStatus =
+  | 'enviado'
+  | 'em-avaliacao'
+  | 'oferta'
+  | 'aceito'
+  | 'recusado'
+  | 'recebido'
+  | 'credito-liberado'
+
+export type PayoutChoice = 'credito' | 'dinheiro'
+
+export type DeliveryMethod = 'ponto-bh' | 'coleta'
+
+export interface SellItemDraft {
+  id: string
+  artist: string
+  album: string
+  condition: ConditionGrade
+  photoDataUrls: string[]
+  fromDiscogsSeed?: boolean
+}
+
+export interface SellItemOffer {
+  itemId: string
+  artist: string
+  album: string
+  condition: ConditionGrade
+  marketValue: number
+  creditOffer: number
+  cashOffer: number
+  demandBonus: number
+  rejected: boolean
+  rejectReason?: string
+  inDemand: boolean
+  release?: CatalogRelease
+}
+
+export interface SubscriberSellListing {
+  id: string
+  subscriberId: string
+  status: SellListingStatus
+  items: SellItemDraft[]
+  offers: SellItemOffer[]
+  payoutChoice: PayoutChoice | null
+  deliveryMethod: DeliveryMethod | null
+  adminNotes: string
+  createdAt: string
+  updatedAt: string
+  offerTotalCredit: number
+  offerTotalCash: number
+  leadId?: string
+}
+
+export type WalletEntryType = 'credito' | 'abatimento' | 'ajuste'
+
+export interface WalletEntry {
+  id: string
+  subscriberId: string
+  type: WalletEntryType
+  amount: number
+  label: string
+  listingId?: string
+  createdAt: string
+}
+
+export interface SubscriberSellConfig {
+  creditPercent: number
+  cashPercent: number
+  demandBonusPercent: number
+  minMarketValue: number
 }
 
 export interface AppState {
@@ -283,6 +357,9 @@ export interface AppState {
   discogsToken: string | null
   collectionLeads: CollectionLead[]
   referralPartners: ReferralPartner[]
+  sellListings: SubscriberSellListing[]
+  walletEntries: WalletEntry[]
+  sellConfig: SubscriberSellConfig
 }
 
 export function emptyMusicalProfile(): MusicalProfile {

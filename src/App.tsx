@@ -7,6 +7,7 @@ import { AdminLayout } from './pages/admin/AdminLayout'
 import { AdminPartners } from './pages/admin/AdminPartners'
 import { AdminSettings } from './pages/admin/AdminSettings'
 import { AdminStock } from './pages/admin/AdminStock'
+import { AdminSubscriberSells } from './pages/admin/AdminSubscriberSells'
 import { AdminSubscribers } from './pages/admin/AdminSubscribers'
 import { Checkout } from './pages/Checkout'
 import { Flyer } from './pages/Flyer'
@@ -14,7 +15,9 @@ import { Landing } from './pages/Landing'
 import { Quiz } from './pages/Quiz'
 import { SellCollection } from './pages/SellCollection'
 import { Preferences } from './pages/subscriber/Preferences'
+import { SellDiscs } from './pages/subscriber/SellDiscs'
 import { SubscriberHome } from './pages/subscriber/SubscriberHome'
+import { Wallet } from './pages/subscriber/Wallet'
 import { AppProvider } from './state/AppContext'
 
 export default function App() {
@@ -30,12 +33,18 @@ export default function App() {
             <Route path="flyer" element={<Flyer />} />
             <Route path="assinante" element={<SubscriberHome />} />
             <Route path="assinante/preferencias" element={<Preferences />} />
+            <Route path="assinante/vender" element={<SellDiscs />} />
+            <Route path="assinante/carteira" element={<Wallet />} />
             <Route path="admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="estoque" element={<AdminStock />} />
               <Route path="assinantes" element={<AdminSubscribers />} />
               <Route path="curadoria" element={<AdminCuration />} />
               <Route path="captacao" element={<AdminCaptacao />} />
+              <Route
+                path="vendas-assinantes"
+                element={<AdminSubscriberSells />}
+              />
               <Route path="parceiros" element={<AdminPartners />} />
               <Route path="config" element={<AdminSettings />} />
             </Route>

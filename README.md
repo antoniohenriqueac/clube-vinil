@@ -29,7 +29,8 @@ Não é uma loja de discos cobrando mensalidade. É uma plataforma de **descober
 3. **Área do assinante** — disco do mês, condição, cartão-história, avaliação, histórico, preferências, pausar/cancelar  
 4. **Admin/curadoria** — estoque, assinantes, picks do mês **e** “Sugestões para garimpar” (sourcing fora do estoque), lista de garimpo exportável (CSV / WhatsApp), KPIs  
 5. **Inteligência musical** — mapa de gosto + catálogo Discogs (token opcional) com fallback para seed local (~400 lançamentos)  
-6. **Captação de coleções** — formulário público “Venda sua coleção”, kanban de leads, avaliação de lote, parceiros, flyer/QR
+6. **Captação de coleções** — formulário público “Venda sua coleção”, kanban de leads, avaliação de lote, parceiros, flyer/QR  
+7. **Assinante vende discos** — troca por crédito na assinatura (ou dinheiro menor), carteira, oferta com regras no Admin
 
 Estado persiste em `localStorage`. Não há backend nem pagamentos reais.
 

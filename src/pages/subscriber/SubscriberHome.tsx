@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ConditionBadge } from '../../components/ConditionBadge'
 import { VinylCover } from '../../components/VinylCover'
 import { getPlan, formatPrice } from '../../data/plans'
+import { nextPaymentWithCredit, walletBalance } from '../../lib/sellOffer'
 import { useApp } from '../../state/AppContext'
 import type { RatingLabel, Subscriber, VinylRecord } from '../../types'
 
@@ -101,6 +102,11 @@ function RatingBlock({
 function SubscriberDashboard({ sub }: { sub: Subscriber }) {
   const { stock, rateCurrentDisc, updateSubscriber, state } = useApp()
   const plan = getPlan(sub.planId)
+  const credit = walletBalance(state.walletEntries, sub.id)
+  const nextPay = nextPaymentWithCredit({
+    planPrice: plan?.price ?? 0,
+    creditBalance: Math.max(0, credit),
+  })
 
   const monthPick = state.monthPicks.find(
     (p) => p.subscriberId === sub.id && p.confirmed,
@@ -208,7 +214,19 @@ function SubscriberDashboard({ sub }: { sub: Subscriber }) {
             <p className="muted">
               Status: <strong>{sub.status}</strong>
             </p>
+            <p className="muted">
+              Crédito: <strong>{formatPrice(Math.max(0, credit))}</strong>
+              {nextPay.creditApplied > 0
+                ? ` · próxima mensalidade com desconto: ${formatPrice(nextPay.due)}`
+                : ''}
+            </p>
             <div className="inline-actions">
+              <Link className="btn btn-amber btn-sm" to="/assinante/vender">
+                Vender meus discos
+              </Link>
+              <Link className="btn btn-ghost btn-sm" to="/assinante/carteira">
+                Carteira
+              </Link>
               <Link className="btn btn-ghost btn-sm" to="/assinante/preferencias">
                 Editar preferências
               </Link>

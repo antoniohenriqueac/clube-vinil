@@ -1,4 +1,9 @@
 import { seedLeads, seedPartners } from '../data/captacao'
+import {
+  defaultSellConfig,
+  seedSellListings,
+  seedWalletEntries,
+} from '../data/subscriberSell'
 import { seedSubscribers } from '../data/subscribers'
 import type {
   AppState,
@@ -10,6 +15,7 @@ import type {
   ReferralPartner,
   StockExtraRecord,
   Subscriber,
+  SubscriberSellConfig,
 } from '../types'
 import { normalizeProfile } from '../types'
 
@@ -31,6 +37,9 @@ const defaultState = (): AppState => ({
   discogsToken: loadStoredToken(),
   collectionLeads: structuredClone(seedLeads),
   referralPartners: structuredClone(seedPartners),
+  sellListings: structuredClone(seedSellListings),
+  walletEntries: structuredClone(seedWalletEntries),
+  sellConfig: { ...defaultSellConfig },
 })
 
 function loadStoredToken(): string | null {
@@ -69,6 +78,14 @@ export function loadState(): AppState {
       referralPartners: parsed.referralPartners?.length
         ? parsed.referralPartners
         : structuredClone(seedPartners),
+      sellListings: parsed.sellListings?.length
+        ? parsed.sellListings
+        : structuredClone(seedSellListings),
+      walletEntries: parsed.walletEntries ?? structuredClone(seedWalletEntries),
+      sellConfig: {
+        ...defaultSellConfig,
+        ...(parsed.sellConfig as Partial<SubscriberSellConfig> | undefined),
+      },
     }
   } catch {
     return defaultState()
