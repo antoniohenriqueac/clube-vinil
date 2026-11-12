@@ -1,0 +1,134 @@
+import { Link } from 'react-router-dom'
+import { brand } from '../brand'
+import { PlanCard } from '../components/PlanCard'
+import { faqs } from '../data/faqs'
+import { plans } from '../data/plans'
+
+const steps = [
+  {
+    title: 'Quiz musical',
+    text: 'Artistas, gêneros, décadas, o que evitar e quanto quer descobrir.',
+  },
+  {
+    title: 'Match com estoque',
+    text: 'O sistema cruza seu perfil com discos disponíveis e sugere picks.',
+  },
+  {
+    title: 'Grading & limpeza',
+    text: 'Cada disco é classificado (Mint → G), testado e preparado.',
+  },
+  {
+    title: 'Embalagem + história',
+    text: 'Embalagem especial e um cartão contando a história do álbum.',
+  },
+  {
+    title: 'Feedback',
+    text: 'Você avalia o envio; o mês seguinte aprende e evita repetições.',
+  },
+]
+
+export function Landing() {
+  return (
+    <>
+      <section className="hero">
+        <div className="hero__bg" aria-hidden>
+          <div className="hero__vinyl">
+            <div className="hero__label">vinil usado · curadoria</div>
+          </div>
+        </div>
+        <div className="container hero__content">
+          <div className="hero__brand">
+            {brand.name}
+            <span>.</span>
+          </div>
+          <h1>Descoberta musical recorrente, em vinil usado.</h1>
+          <p>
+            Não competimos por quem tem mais discos — competimos por quem entende
+            melhor o seu gosto. Piloto em {brand.city}.
+          </p>
+          <div className="hero__cta">
+            <Link className="btn btn-amber" to="/quiz">
+              Fazer o quiz musical
+            </Link>
+            <a className="btn btn-ghost" href="#planos" style={{ color: 'var(--paper)', borderColor: 'rgba(242,230,208,0.45)' }}>
+              Ver planos
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="como-funciona">
+        <div className="container">
+          <div className="section__head">
+            <h2>Como funciona</h2>
+            <p>
+              Uma experiência de curadoria contínua: do perfil musical ao sulco
+              limpo na sua prateleira.
+            </p>
+          </div>
+          <div className="steps">
+            {steps.map((s) => (
+              <article key={s.title} className="step">
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--alt" id="planos">
+        <div className="container">
+          <div className="section__head">
+            <h2>Planos do piloto</h2>
+            <p>
+              Preços de teste. Frete cobrado à parte. Acessível, enxuto, feito
+              para validar curadoria em {brand.city}.
+            </p>
+          </div>
+          <div className="plans-grid">
+            {plans.map((plan, i) => (
+              <PlanCard
+                key={plan.id}
+                plan={plan}
+                featured={i === 1}
+                ctaTo="/quiz"
+                ctaLabel="Quero esse"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="faq">
+        <div className="container">
+          <div className="section__head">
+            <h2>Perguntas frequentes</h2>
+            <p>Transparência de um piloto lean — sem enrolação de loja disfarçada.</p>
+          </div>
+          <div className="faq">
+            {faqs.map((item) => (
+              <details key={item.q}>
+                <summary>{item.q}</summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-band">
+        <div className="container">
+          <h2>Pronto para garimpar o próximo disco?</h2>
+          <p>
+            Monte seu perfil musical em poucos minutos e veja como a curadoria
+            encaixa no seu gosto.
+          </p>
+          <Link className="btn btn-amber" to="/quiz">
+            Começar o quiz
+          </Link>
+        </div>
+      </section>
+    </>
+  )
+}

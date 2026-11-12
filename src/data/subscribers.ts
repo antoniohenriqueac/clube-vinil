@@ -1,0 +1,180 @@
+import type { Subscriber } from '../types'
+
+export const seedSubscribers: Subscriber[] = [
+  {
+    id: 'sub-ana',
+    name: 'Ana Ribeiro',
+    email: 'ana@email.com',
+    planId: 'garimpo',
+    status: 'ativo',
+    joinedAt: '2026-08-12',
+    profile: {
+      favoriteArtists: ['Tim Maia', 'Djavan', 'Marvin Gaye'],
+      genres: ['MPB', 'Soul', 'Funk'],
+      decades: ['70s', '80s'],
+      favoriteAlbums: ['Racional Vol. 1', "What's Going On"],
+      blockedArtists: ['Legião Urbana'],
+      discoveryLevel: 55,
+      hasTurntable: true,
+    },
+    deliveries: [
+      {
+        month: '2026-09',
+        recordIds: ['r16'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r16', stars: 5, label: 'amei', month: '2026-09' },
+        ],
+      },
+      {
+        month: '2026-10',
+        recordIds: ['r28'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r28', stars: 4, label: null, month: '2026-10' },
+        ],
+      },
+    ],
+    currentPickIds: [],
+  },
+  {
+    id: 'sub-bruno',
+    name: 'Bruno Costa',
+    email: 'bruno@email.com',
+    planId: 'garimpo-plus',
+    status: 'ativo',
+    joinedAt: '2026-08-20',
+    profile: {
+      favoriteArtists: ['Pink Floyd', 'Radiohead', 'David Bowie'],
+      genres: ['Rock', 'Eletrônico'],
+      decades: ['70s', '90s', '00s'],
+      favoriteAlbums: ['OK Computer', 'The Dark Side of the Moon'],
+      blockedArtists: [],
+      discoveryLevel: 70,
+      hasTurntable: true,
+    },
+    deliveries: [
+      {
+        month: '2026-09',
+        recordIds: ['r30'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r30', stars: 3, label: 'ja-tinha', month: '2026-09' },
+        ],
+      },
+      {
+        month: '2026-10',
+        recordIds: ['r24'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r24', stars: 5, label: 'amei', month: '2026-10' },
+        ],
+      },
+    ],
+    currentPickIds: [],
+  },
+  {
+    id: 'sub-carla',
+    name: 'Carla Mendes',
+    email: 'carla@email.com',
+    planId: 'garimpo-duplo',
+    status: 'ativo',
+    joinedAt: '2026-09-01',
+    profile: {
+      favoriteArtists: ['Elis Regina', 'Cartola', 'Clara Nunes', 'Chico Buarque'],
+      genres: ['MPB', 'Samba', 'Bossa Nova'],
+      decades: ['60s', '70s', '80s'],
+      favoriteAlbums: ['Construção', 'Cartola'],
+      blockedArtists: ['Os Mutantes'],
+      discoveryLevel: 40,
+      hasTurntable: true,
+    },
+    deliveries: [
+      {
+        month: '2026-10',
+        recordIds: ['r02', 'r39'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r02', stars: 5, label: 'amei', month: '2026-10' },
+          { recordId: 'r39', stars: 4, label: null, month: '2026-10' },
+        ],
+      },
+    ],
+    currentPickIds: [],
+  },
+  {
+    id: 'sub-diego',
+    name: 'Diego Alves',
+    email: 'diego@email.com',
+    planId: 'garimpo',
+    status: 'pausado',
+    joinedAt: '2026-08-05',
+    profile: {
+      favoriteArtists: ['Queen', 'The Beatles', 'Raul Seixas'],
+      genres: ['Rock', 'Pop'],
+      decades: ['60s', '70s'],
+      favoriteAlbums: ['Abbey Road'],
+      blockedArtists: [],
+      discoveryLevel: 30,
+      hasTurntable: false,
+    },
+    deliveries: [
+      {
+        month: '2026-09',
+        recordIds: ['r36'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r36', stars: 2, label: 'nao-curti', month: '2026-09' },
+        ],
+      },
+    ],
+    currentPickIds: [],
+  },
+  {
+    id: 'sub-elena',
+    name: 'Elena Souza',
+    email: 'elena@email.com',
+    planId: 'garimpo-plus',
+    status: 'ativo',
+    joinedAt: '2026-09-15',
+    profile: {
+      favoriteArtists: ['Miles Davis', 'John Coltrane', 'Tom Jobim'],
+      genres: ['Jazz', 'Bossa Nova'],
+      decades: ['60s', '70s'],
+      favoriteAlbums: ['Kind of Blue', 'Wave'],
+      blockedArtists: ['Nirvana'],
+      discoveryLevel: 65,
+      hasTurntable: true,
+    },
+    deliveries: [],
+    currentPickIds: [],
+  },
+  {
+    id: 'sub-felipe',
+    name: 'Felipe Nogueira',
+    email: 'felipe@email.com',
+    planId: 'garimpo',
+    status: 'cancelado',
+    joinedAt: '2026-08-01',
+    profile: {
+      favoriteArtists: ['Titãs', 'Cazuza', 'Legião Urbana'],
+      genres: ['Rock'],
+      decades: ['80s'],
+      favoriteAlbums: ['Cabeça Dinossauro'],
+      blockedArtists: [],
+      discoveryLevel: 20,
+      hasTurntable: true,
+    },
+    deliveries: [
+      {
+        month: '2026-09',
+        recordIds: ['r17'],
+        status: 'enviado',
+        feedback: [
+          { recordId: 'r17', stars: 1, label: 'nao-curti', month: '2026-09' },
+        ],
+      },
+    ],
+    currentPickIds: [],
+  },
+]
