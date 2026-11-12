@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
+import { STYLE_SUGGESTIONS } from '../../lib/tasteProfile'
 import { useApp } from '../../state/AppContext'
-import type { Decade, Genre, MusicalProfile } from '../../types'
+import { normalizeProfile, type Decade, type Genre, type MusicalProfile } from '../../types'
 
 const GENRES: Genre[] = [
   'MPB',
@@ -83,6 +84,67 @@ function PreferencesForm({
                 {d}
               </button>
             ))}
+          </div>
+
+          <h3>Estilos</h3>
+          <div className="chip-grid">
+            {STYLE_SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                className={`chip ${profile.styles.includes(s) ? 'chip--on' : ''}`}
+                onClick={() =>
+                  setProfile((p) => ({ ...p, styles: toggle(p.styles, s) }))
+                }
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <div className="slider-row">
+            <label htmlFor="energy">Energia (calmo → dançante): {profile.energy}</label>
+            <input
+              id="energy"
+              type="range"
+              min={0}
+              max={100}
+              value={profile.energy}
+              onChange={(e) =>
+                setProfile((p) => ({ ...p, energy: Number(e.target.value) }))
+              }
+            />
+          </div>
+          <div className="slider-row">
+            <label htmlFor="ae">
+              Textura (acústico → eletrônico): {profile.acousticElectronic}
+            </label>
+            <input
+              id="ae"
+              type="range"
+              min={0}
+              max={100}
+              value={profile.acousticElectronic}
+              onChange={(e) =>
+                setProfile((p) => ({
+                  ...p,
+                  acousticElectronic: Number(e.target.value),
+                }))
+              }
+            />
+          </div>
+          <div className="slider-row">
+            <label htmlFor="groove">Groove: {profile.groove}</label>
+            <input
+              id="groove"
+              type="range"
+              min={0}
+              max={100}
+              value={profile.groove}
+              onChange={(e) =>
+                setProfile((p) => ({ ...p, groove: Number(e.target.value) }))
+              }
+            />
           </div>
 
           <h3>Artistas favoritos</h3>
@@ -209,7 +271,7 @@ export function Preferences() {
   if (!sessionSubscriber) return <Navigate to="/assinante" replace />
   return (
     <PreferencesForm
-      initial={sessionSubscriber.profile}
+      initial={normalizeProfile(sessionSubscriber.profile)}
       subscriberId={sessionSubscriber.id}
     />
   )

@@ -907,6 +907,125 @@ table.data th {
   text-align: center;
 }
 
+.quiz-layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .quiz-layout {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.taste-panel {
+  background: rgba(26, 20, 16, 0.92);
+  color: var(--paper);
+  padding: 1.25rem;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  position: sticky;
+  top: 5.5rem;
+  animation: rise-in 0.45s ease both;
+}
+
+.taste-panel h3,
+.taste-panel h4 {
+  color: var(--paper);
+}
+
+.taste-panel__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber-hot);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.taste-panel .muted {
+  color: rgba(242, 230, 208, 0.65);
+}
+
+.taste-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.85rem 0;
+  min-height: 2rem;
+}
+
+.taste-tag {
+  font-size: 0.78rem;
+  padding: 0.25rem 0.55rem;
+  background: var(--burgundy);
+  color: var(--paper);
+}
+
+.taste-tag--alt {
+  background: transparent;
+  border: 1px solid rgba(201, 162, 39, 0.55);
+  color: var(--amber-hot);
+}
+
+.taste-meter {
+  margin: 0.85rem 0;
+}
+
+.taste-meter__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+.taste-meter__track {
+  height: 7px;
+  background: rgba(242, 230, 208, 0.15);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.taste-meter__track > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), var(--burgundy));
+  transition: width 0.35s ease;
+}
+
+.taste-meter__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: rgba(242, 230, 208, 0.55);
+  margin-top: 0.2rem;
+}
+
+.taste-examples {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(242, 230, 208, 0.12);
+}
+
+.taste-examples ul,
+.taste-summary {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: rgba(242, 230, 208, 0.8);
+}
+
+.taste-summary {
+  margin-top: 0.85rem;
+}
+
+code {
+  font-size: 0.85em;
+  background: rgba(26, 20, 16, 0.06);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
 @media (max-width: 720px) {
   .hero__vinyl {
     opacity: 0.35;
