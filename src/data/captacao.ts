@@ -21,6 +21,7 @@ export const LEAD_SOURCES: { id: CollectionLead['source']; label: string }[] = [
   { id: 'mudanca', label: 'Empresa de mudança' },
   { id: 'sebo', label: 'Sebo parceiro' },
   { id: 'formulario', label: 'Formulário do site' },
+  { id: 'assinante', label: 'Assinante' },
 ]
 
 export const LEAD_REASONS: { id: CollectionLead['reason']; label: string }[] = [

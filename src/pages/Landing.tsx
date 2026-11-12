@@ -117,6 +117,21 @@ export function Landing() {
         </div>
       </section>
 
+      <section className="section" id="credito-discos">
+        <div className="container">
+          <div className="section__head">
+            <h2>Tem discos parados? Troque por crédito</h2>
+            <p>
+              Assinantes podem vender discos ao clube e abater o valor nas
+              próximas mensalidades — ou receber em dinheiro com taxa menor.
+            </p>
+          </div>
+          <Link className="btn btn-amber" to="/assinante/vender">
+            Vender meus discos
+          </Link>
+        </div>
+      </section>
+
       <section className="section section--alt" id="venda-colecao">
         <div className="container">
           <div className="section__head">

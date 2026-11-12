@@ -7,6 +7,7 @@ const links = [
   { to: '/admin/assinantes', label: 'Assinantes' },
   { to: '/admin/curadoria', label: 'Curadoria' },
   { to: '/admin/captacao', label: 'Captação' },
+  { to: '/admin/vendas-assinantes', label: 'Vendas assinantes' },
   { to: '/admin/parceiros', label: 'Parceiros' },
   { to: '/admin/config', label: 'Config' },
 ]

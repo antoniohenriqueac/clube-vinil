@@ -117,7 +117,8 @@ export function Checkout() {
             </div>
             <p className="muted" style={{ fontSize: '0.88rem' }}>
               Ao confirmar, criamos um assinante local no navegador
-              (localStorage). Não há cobrança.
+              (localStorage). Não há cobrança. Se você acumular crédito vendendo
+              discos, o abatimento aparece na área do assinante / carteira.
             </p>
             <div className="inline-actions">
               <button

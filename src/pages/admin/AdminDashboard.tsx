@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { formatPrice } from '../../data/plans'
-import { computeCaptacaoKpis } from '../../lib/captacaoKpis'
+import {
+  computeCaptacaoKpis,
+  computeSubscriberSellKpis,
+} from '../../lib/captacaoKpis'
 import {
   computePilotKpis,
   mrrFromSubscribers,
@@ -14,6 +17,11 @@ export function AdminDashboard() {
   const mrr = mrrFromSubscribers(state.subscribers)
   const u = unitEconomicsGarimpo
   const captacao = computeCaptacaoKpis(state.collectionLeads)
+  const sellKpis = computeSubscriberSellKpis({
+    walletEntries: state.walletEntries,
+    sellListings: state.sellListings,
+    leads: state.collectionLeads,
+  })
 
   return (
     <>
@@ -147,6 +155,46 @@ export function AdminDashboard() {
         <div className="inline-actions">
           <Link className="btn btn-primary btn-sm" to="/admin/captacao">
             Abrir pipeline
+          </Link>
+        </div>
+      </section>
+
+      <section className="surface" style={{ marginTop: '1.25rem' }}>
+        <span className="example-tag">Assinante vende · dados de exemplo</span>
+        <h3>Canal assinantes</h3>
+        <div className="kpi-grid">
+          <div className="kpi">
+            <span>Crédito emitido</span>
+            <strong>{formatPrice(sellKpis.creditIssued)}</strong>
+          </div>
+          <div className="kpi">
+            <span>Crédito em aberto (passivo)</span>
+            <strong>{formatPrice(sellKpis.creditOpen)}</strong>
+          </div>
+          <div className="kpi">
+            <span>Discos via assinantes</span>
+            <strong>{sellKpis.discsFromSubscribers}</strong>
+          </div>
+          <div className="kpi">
+            <span>Custo médio (assinantes)</span>
+            <strong>
+              {sellKpis.avgCostSubscriberChannel
+                ? formatPrice(sellKpis.avgCostSubscriberChannel)
+                : '—'}
+            </strong>
+          </div>
+          <div className="kpi">
+            <span>Custo médio (captação externa)</span>
+            <strong>
+              {sellKpis.avgCostExternalChannel
+                ? formatPrice(sellKpis.avgCostExternalChannel)
+                : '—'}
+            </strong>
+          </div>
+        </div>
+        <div className="inline-actions">
+          <Link className="btn btn-primary btn-sm" to="/admin/vendas-assinantes">
+            Revisar ofertas
           </Link>
         </div>
       </section>
