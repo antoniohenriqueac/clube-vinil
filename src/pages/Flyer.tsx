@@ -26,6 +26,13 @@ export function Flyer() {
         </div>
 
         <article className="flyer">
+          <img
+            className="flyer__logo"
+            src={brand.logoHeader}
+            alt={brand.name}
+            width={320}
+            height={64}
+          />
           <p className="flyer__eyebrow">BH · coleções inteiras</p>
           <h1>Compramos discos de vinil</h1>
           <p className="flyer__lead">

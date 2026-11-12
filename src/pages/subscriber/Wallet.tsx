@@ -109,7 +109,7 @@ export function Wallet() {
                           color:
                             e.amount >= 0
                               ? 'var(--success)'
-                              : 'var(--burgundy)',
+                              : 'var(--danger)',
                         }}
                       >
                         {formatPrice(e.amount)}

@@ -281,7 +281,7 @@ export function SellCollection() {
             </span>
           </label>
 
-          {error && <p style={{ color: 'var(--burgundy)' }}>{error}</p>}
+          {error && <p style={{ color: 'var(--danger)' }}>{error}</p>}
 
           <div className="inline-actions">
             <button type="submit" className="btn btn-amber">

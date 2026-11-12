@@ -8,13 +8,19 @@ export function Layout() {
   return (
     <>
       <div className="demo-banner">
-        Protótipo clicável · <strong>demonstração</strong> sem pagamentos reais · dados de exemplo
+        Protótipo clicável · <strong>demonstração</strong> sem pagamentos reais ·
+        dados de exemplo
       </div>
       <header className="site-header">
         <div className="container site-header__inner">
-          <Link to="/" className="brand-mark">
-            <span className="brand-mark__disc" aria-hidden />
-            {brand.name}
+          <Link to="/" className="brand-mark" aria-label={brand.name}>
+            <img
+              className="brand-mark__logo"
+              src={brand.logoHeader}
+              alt={brand.name}
+              width={160}
+              height={28}
+            />
           </Link>
           <nav className="nav" aria-label="Principal">
             <Link
@@ -74,7 +80,7 @@ export function Layout() {
             {' · '}
             <Link to="/flyer">Flyer</Link>
             {' · '}
-            Nome provisório — `src/brand.ts`
+            Identidade em `src/brand.ts`
           </div>
         </div>
       </footer>
