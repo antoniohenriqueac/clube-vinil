@@ -117,6 +117,22 @@ export function Landing() {
         </div>
       </section>
 
+      <section className="section section--alt" id="venda-colecao">
+        <div className="container">
+          <div className="section__head">
+            <h2>Tem uma coleção para vender?</h2>
+            <p>
+              Herança, mudança ou inventário em {brand.city}: compramos lotes
+              inteiros com avaliação cuidadosa — sem depender só de placa no
+              poste.
+            </p>
+          </div>
+          <Link className="btn btn-primary" to="/venda-sua-colecao">
+            Venda sua coleção
+          </Link>
+        </div>
+      </section>
+
       <section className="cta-band">
         <div className="container">
           <h2>Pronto para garimpar o próximo disco?</h2>

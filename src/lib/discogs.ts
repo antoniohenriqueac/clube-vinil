@@ -269,6 +269,78 @@ export async function loadCatalogForSourcing(
   }
 }
 
+/** Search Discogs by free-text query (artist/album), with cache + rate limit. */
+export async function searchDiscogsByQuery(
+  query: string,
+  token: string,
+): Promise<CatalogRelease[]> {
+  const q = query.trim()
+  if (!q) return []
+  const path = `/database/search?type=release&format=Vinyl&per_page=5&q=${encodeURIComponent(q)}`
+  const data = await discogsFetch<DiscogsSearchResponse>(
+    path,
+    token,
+    `q:${q.toLowerCase()}`,
+  )
+  if (!data?.results?.length) return []
+  const releases = data.results.slice(0, 3).map(toCatalogRelease)
+  for (const item of releases.slice(0, 1)) {
+    if (!item.discogsId) continue
+    const stats = await discogsFetch<DiscogsMarketplaceStats>(
+      `/marketplace/stats/${item.discogsId}`,
+      token,
+      `stats:${item.discogsId}`,
+    )
+    if (stats?.lowest_price?.value) {
+      const v = stats.lowest_price.value
+      const cur = stats.lowest_price.currency
+      const brl =
+        cur === 'BRL' ? v : cur === 'EUR' ? v * 6 : v * 5.5
+      item.typicalUsedPriceBrl = Math.round(brl)
+    }
+  }
+  return releases
+}
+
+/** Build a catalog for lot valuation: seed + optional Discogs enrichment for each line. */
+export async function loadCatalogForLotTitles(
+  titles: string[],
+  storedToken: string | null,
+): Promise<{ catalog: CatalogRelease[]; mode: CatalogMode; note: string }> {
+  const token = resolveDiscogsToken(storedToken)
+  if (!token) {
+    return {
+      catalog: seedCatalog,
+      mode: 'seed',
+      note: 'Avaliação via catálogo seed (sem token Discogs).',
+    }
+  }
+
+  const extras: CatalogRelease[] = []
+  const seen = new Set(seedCatalog.map((r) => `${r.artist}|${r.album}`.toLowerCase()))
+  for (const title of titles.slice(0, 12)) {
+    try {
+      const hits = await searchDiscogsByQuery(title, token)
+      for (const h of hits) {
+        const key = `${h.artist}|${h.album}`.toLowerCase()
+        if (seen.has(key)) continue
+        seen.add(key)
+        extras.push(h)
+      }
+    } catch {
+      /* keep going with seed */
+    }
+  }
+
+  return {
+    catalog: [...extras, ...seedCatalog],
+    mode: extras.length ? 'discogs' : 'seed',
+    note: extras.length
+      ? `Discogs enriquecido (${extras.length} resultados) + seed.`
+      : 'Token presente, mas Discogs sem hits úteis — usando seed.',
+  }
+}
+
 /** Test helper: simulate discogs mapping without network. */
 export function mockDiscogsReleasesFromSeed(n = 12): CatalogRelease[] {
   return seedCatalog.slice(0, n).map((r) => ({
