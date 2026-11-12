@@ -1,0 +1,76 @@
+import { Link, NavLink, Outlet } from 'react-router-dom'
+import { brand } from '../brand'
+import { useApp } from '../state/AppContext'
+
+export function Layout() {
+  const { sessionSubscriber, logout } = useApp()
+
+  return (
+    <>
+      <div className="demo-banner">
+        Protótipo clicável · <strong>demonstração</strong> sem pagamentos reais · dados de exemplo
+      </div>
+      <header className="site-header">
+        <div className="container site-header__inner">
+          <Link to="/" className="brand-mark">
+            <span className="brand-mark__disc" aria-hidden />
+            {brand.name}
+          </Link>
+          <nav className="nav" aria-label="Principal">
+            <Link
+              to="/"
+              onClick={() => {
+                window.setTimeout(
+                  () =>
+                    document
+                      .getElementById('como-funciona')
+                      ?.scrollIntoView({ behavior: 'smooth' }),
+                  50,
+                )
+              }}
+            >
+              Como funciona
+            </Link>
+            <Link
+              to="/"
+              onClick={() => {
+                window.setTimeout(
+                  () =>
+                    document
+                      .getElementById('planos')
+                      ?.scrollIntoView({ behavior: 'smooth' }),
+                  50,
+                )
+              }}
+            >
+              Planos
+            </Link>
+            <NavLink to="/quiz">Quiz</NavLink>
+            <NavLink to="/assinante">Área do assinante</NavLink>
+            <NavLink to="/admin">Admin</NavLink>
+            {sessionSubscriber ? (
+              <button type="button" className="linkish" onClick={logout}>
+                Sair ({sessionSubscriber.name.split(' ')[0]})
+              </button>
+            ) : null}
+          </nav>
+        </div>
+      </header>
+      <main>
+        <Outlet />
+      </main>
+      <footer className="site-footer">
+        <div className="container site-footer__inner">
+          <div>
+            <strong>{brand.name}</strong> — {brand.tagline}
+            <div>
+              Piloto em {brand.city} · ~{brand.pilotTargetSubscribers} assinantes ·{' '}
+              {brand.pilotMonths} meses
+            </div>
+          </div>
+          <div>Nome provisório — renomeie em `src/brand.ts`</div>
+        </div>
+      </footer>
+    </>
+  )
+}
